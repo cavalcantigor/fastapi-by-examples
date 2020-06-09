@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from typing import List
+from fastapi import (FastAPI, Query)
 import uvicorn
 
 
@@ -6,13 +7,18 @@ app = FastAPI()
 
 
 @app.get("/")
-def hello_world():
+async def hello_world():
     return {"Hello": "World"}
 
 
 @app.get("/hello")
-def hello_guest(q: str = "Guest"):
-    return {"Hello": q}
+async def hello_multiple_guest(q: List[str] = Query(None)):
+    return {"Hello": ' '.join(q)}
+
+
+@app.get("/hello/validate")
+async def hello_validated_guest(q: str = Query("Guest", max_length=10)):
+    return {"Hello": ' '.join(q)}
 
 
 @app.get("/hello/{name}")
