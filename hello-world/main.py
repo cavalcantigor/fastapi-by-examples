@@ -1,27 +1,27 @@
 from typing import List
-from fastapi import (FastAPI, Query)
+from fastapi import (FastAPI, Query, status)
 import uvicorn
 
 
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/", status_code=200)
 async def hello_world():
     return {"Hello": "World"}
 
 
-@app.get("/hello")
+@app.get("/hello", status_code=status.HTTP_200_OK)
 async def hello_multiple_guest(q: List[str] = Query(None)):
     return {"Hello": ' '.join(q)}
 
 
-@app.get("/hello/validate")
+@app.get("/hello/validate", status_code=status.HTTP_200_OK)
 async def hello_validated_guest(q: str = Query("Guest", max_length=10)):
     return {"Hello": ' '.join(q)}
 
 
-@app.get("/hello/{name}")
+@app.get("/hello/{name}", status_code=status.HTTP_200_OK)
 async def read_item(name):
     return {"Hello": name}
 
